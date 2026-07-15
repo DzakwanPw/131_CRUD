@@ -46,6 +46,21 @@ app.get('/:id', (req, res) => {
         });
 });
 
+app.post('/', (req, res) => {
+    const { nama, nim, kelas } = req.body;
+    pool.query(
+        'INSERT INTO biodata (nama, nim, kelas) VALUES ($1, $2, $3) RETURNING *',
+        [nama, nim, kelas]
+    )
+        .then(result => {
+            res.status(201).json(result.rows[0]);
+        })
+        .catch(err => {
+            console.error("Error executing query", err.stack);
+            res.status(500).send("Database Error");
+        });
+});
+
 app.listen(port, () => {
     console.log(`CIHUY BERJALAN on port ${port}.`);
 })

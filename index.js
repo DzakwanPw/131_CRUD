@@ -31,6 +31,16 @@ app.get('/', (req, res) => {
         });
 });        
 
+app.get('/:id', (req, res) => {
+    const { id } = req.params;
+    pool.query('SELECT * FROM biodata WHERE id = $1', [id])
+        .then(result => {
+            if (result.rows.length === 0) {
+                return res.status(404).send('Data tidak ditemukan');
+            }
+            res.json(result.rows[0]);
+        })
+
 app.listen(port, () => {
     console.log(`CIHUY BERJALAN on port ${port}.`);
 })
